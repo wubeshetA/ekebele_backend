@@ -1,5 +1,5 @@
 from django.db import models
-
+import random
 
 # Create your models here.
 
@@ -35,6 +35,12 @@ class BirthCertificate(models.Model):
     email_address = models.EmailField(blank=True, null=True)  # Not mandatory
 
     phone_number = models.CharField(max_length=15)
+    application_number = models.CharField(max_length=7, unique=True, editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.application_number:
+            self.application_number = str(random.randint(1000000, 9999999))
+        super().save(*args, **kwargs)
 
     def __str__(self):
 

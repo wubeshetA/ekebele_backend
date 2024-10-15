@@ -5,8 +5,7 @@ from .models import BirthCertificate
 
 
 class BirthCertificateSerializer(serializers.ModelSerializer):
-
-
+    application_number = serializers.ReadOnlyField()
     class Meta:
 
 
