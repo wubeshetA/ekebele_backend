@@ -51,6 +51,11 @@ pip install -r requirements.txt
 
 ### Running the Development Server
 
+First, run the database migration.
+```bash
+python manage.py migrate
+```
+Then, run the development server
 ```bash
 python manage.py runserver
 ```
