@@ -2,8 +2,9 @@
 # pip install pipenv
 
 # pipenv install
-pip install -r requirements.txt
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
 
 # make migrations
-python manage.py migrate 
-python manage.py collectstatic
+python3.11 manage.py migrate 
+python3.11 manage.py collectstatic
