@@ -1,14 +1,13 @@
 from django.urls import path
-
-from .views import BirthCertificateView
-
+from .views import BirthCertificateListCreateView, BirthCertificateDetailView
 
 urlpatterns = [
 
-    path('apply-birth-certificate/', BirthCertificateView.as_view(),
-         name='apply-birth-certificate-list-create'),
 
-    path('vital-events/<int:pk>/', BirthCertificateView.as_view(),
-         name='vital-events-update'),
+    path('vital-events/birth-certificate/', BirthCertificateListCreateView.as_view(), name='vital-events-list-create'),
+    path('vital-events/birth-certificate/<id>/', BirthCertificateDetailView.as_view(), name='vital-events-detail'),
+
+    #     path('vital-events/mine/', BirthCertificateListView.as_view(),
+    #          name='vital-events-mine'),
 
 ]

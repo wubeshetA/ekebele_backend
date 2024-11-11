@@ -16,10 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from accounts.views import check_is_staff
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+
     path('api/', include('vital_events.urls')),
+    path('auth/check-is-staff/', check_is_staff, name='check-is-staff'),
 ]

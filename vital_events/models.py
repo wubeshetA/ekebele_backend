@@ -8,34 +8,59 @@ from django.db import models
 
 class BirthCertificate(models.Model):
 
-    APPLICANT_RELATIONSHIP_CHOICES = [
+    # APPLICANT_RELATIONSHIP_CHOICES = [
 
-        ('parent', 'Parent'),
+    #     ('parent', 'Parent'),
+    #     ('guardian', 'Guardian'),
+    #     ('other', 'Other'),
 
-        ('guardian', 'Guardian'),
+    # ]
 
-        ('other', 'Other'),
+    APPLICATION_STATUS_CHOICES = [
+
+        ('pending', 'Pending'),
+
+        ('approved', 'Approved'),
+
+        ('rejected', 'Rejected'),
 
     ]
 
     applicant_name = models.CharField(max_length=255)
 
-    child_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    middle_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    nationality = models.CharField(max_length=255)
+
+    father_fullname = models.CharField(max_length=255)
+    father_nationality = models.CharField(max_length=255)
+
+    mother_fullname = models.CharField(max_length=255)
+    mother_nationality = models.CharField(max_length=255)
 
     dob = models.DateField(verbose_name="Date of Birth")
 
+    country_of_birth = models.CharField(max_length=255)
+    region_of_birth = models.CharField(max_length=255)
     place_of_birth = models.CharField(max_length=255)
 
     gender = models.CharField(max_length=10, choices=[
                               ('male', 'Male'), ('female', 'Female')])
 
-    relationship_to_child = models.CharField(
-        max_length=50, choices=APPLICANT_RELATIONSHIP_CHOICES)
-
-    email_address = models.EmailField(blank=True, null=True)  # Not mandatory
+    applicant_email_address = models.EmailField(
+        blank=True, null=True)  # Not mandatory
 
     phone_number = models.CharField(max_length=15)
-    application_number = models.CharField(max_length=7, unique=True, editable=False)
+    application_number = models.CharField(
+        max_length=7, unique=True, editable=False)
+    status = models.CharField(
+        max_length=10, choices=APPLICATION_STATUS_CHOICES, default='pending')
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
+
+    comment = models.TextField(blank=True, null=True)
+
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         if not self.application_number:

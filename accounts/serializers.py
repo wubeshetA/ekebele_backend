@@ -1,6 +1,6 @@
 # accounts/serializers.py
 
-from djoser.serializers import UserCreateSerializer
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
@@ -10,33 +10,29 @@ from rest_framework import serializers
 
 User = get_user_model()
 
+
 class CustomUserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'first_name', 'last_name', 'phone_number', 'email', 'password')
+        fields = ('id', 'first_name', 'last_name',
+                  'phone_number', 'email', 'password')
 
+
+class CustomUserSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta):
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'phone_number', 'email', 'is_staff')
+
+    
+   
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
+    @classmethod
+    def get_token(cls, user):
+        # Get the default token from the parent class
+        token = super().get_token(user)
 
-        # Use the custom authentication backend to authenticate by email or phone number
-        user = authenticate(request=self.context.get('request'), username=username, password=password)
+        # Add custom claims
+        token['is_staff'] = user.is_staff
 
-        if not user:
-            raise serializers.ValidationError(_('Invalid login credentials'))
-
-        refresh = self.get_token(user)
-
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-            'user': {
-                'id': user.id,
-                'email': user.email,
-                'phone_number': user.phone_number,
-                'first_name': user.first_name,
-                'last_name': user.last_name
-            }
-        }
+        return token
