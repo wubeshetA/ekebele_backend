@@ -52,3 +52,19 @@ class BirthCertificateDetailView(generics.RetrieveUpdateAPIView):
         instance = self.get_object()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+class BirthCertificateByAppNumber(generics.RetrieveAPIView):
+    queryset = BirthCertificate.objects.all()
+    serializer_class = BirthCertificateSerializer
+    lookup_field = 'application_number'
+
+    def get(self, request, *args, **kwargs):
+        application_number = kwargs.get('application_number')
+        try:
+            birth_certificate = BirthCertificate.objects.get(application_number=application_number)
+            serializer = self.get_serializer(birth_certificate)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except BirthCertificate.DoesNotExist:
+            return Response({"detail": "Application not found."}, status=status.HTTP_404_NOT_FOUND)
