@@ -17,12 +17,17 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         fields = ('id', 'first_name', 'last_name',
                   'phone_number', 'email', 'password')
 
+        extra_kwargs = {
+            'verification_code': {'write_only': True},  # Ensure it's not requested
+        }
 
 class CustomUserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = User
         fields = ('id', 'first_name', 'last_name', 'phone_number', 'email', 'is_staff')
-
+        extra_kwargs = {
+            'verification_code': {'write_only': True},  # Hide it from being readable
+        }
     
    
 
@@ -36,3 +41,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['is_staff'] = user.is_staff
 
         return token
+
+
+
+
+class VerifyEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    verification_code = serializers.CharField(max_length=6)

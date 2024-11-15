@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import check_is_staff
+from accounts.views import check_is_staff, VerifyEmailView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
@@ -24,4 +24,5 @@ urlpatterns = [
 
     path('api/', include('vital_events.urls')),
     path('auth/check-is-staff/', check_is_staff, name='check-is-staff'),
+    path('auth/verify-email/', VerifyEmailView.as_view(), name='verify-email'),
 ]
