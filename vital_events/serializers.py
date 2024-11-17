@@ -7,9 +7,10 @@ class BirthCertificateSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         read_only=True)  # Make user read-only
 
+    # exclude picture field from the serializer
     class Meta:
         model = BirthCertificate
-        fields = '__all__'
+        exclude = ('picture',)
 
     def get_fields(self):
         fields = super().get_fields()

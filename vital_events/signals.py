@@ -47,3 +47,38 @@ def send_birth_certificate_email(sender, instance, created, **kwargs):
             print(f"Failed to send email: {e}")
         else:
             print("================ Email sent successfully")
+
+
+@receiver(post_save, sender=BirthCertificate)
+def notify_status_change(sender, instance, created, **kwargs):
+    # Only send notification if the status has changed
+    if not created and hasattr(instance, '_status_changed') and instance._status_changed:
+        if instance._previous_status == 'pending':
+            # Handle approved status
+            if instance.status == 'approved':
+                if instance.applicant_email_address:
+                    send_mail(
+                        subject="Birth Certificate Approved",
+                        message=f"Dear {instance.first_name} {instance.last_name},\n\n"
+                                "Your birth certificate application has been approved. "
+                                "You view and download your certificate on eKebele portal.\n\n"
+                                "Thank you,\nThe eKebele Team",
+                        from_email="eKebele Team <ekebele.eth@gmail.com>",
+                        recipient_list=[instance.applicant_email_address],
+                        fail_silently=False,
+                    )
+
+            # Handle rejected status
+            elif instance.status == 'rejected':
+                if instance.applicant_email_address:
+                    send_mail(
+                        subject="Birth Certificate Application Status",
+                        message=f"Dear {instance.first_name} {instance.last_name},\n\n"
+                                f"We regret to inform you that your birth certificate application has been rejected. \n"
+                                f"Reason: {instance.comment if instance.comment else 'Not specified'}.\n\n"
+                                "Please contact our support team for more information.\n\n"
+                                "Thank you,\nThe eKebele Team",
+                        from_email="eKebele Team <ekebele.eth@gmail.com>",
+                        recipient_list=[instance.applicant_email_address],
+                        fail_silently=False,
+                    )
