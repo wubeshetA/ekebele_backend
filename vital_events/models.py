@@ -6,8 +6,8 @@ import random
 from django.db import models
 from vital_events.validators import validate_image_size
 
-class BirthCertificate(models.Model):
 
+class BirthCertificate(models.Model):
 
     APPLICATION_STATUS_CHOICES = [
 
@@ -55,7 +55,8 @@ class BirthCertificate(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
 
-    picture = models.ImageField(upload_to="vital_events/images/", blank=True, null=True, validators=[validate_image_size])
+    picture = models.ImageField(upload_to="vital_events/images/",
+                                blank=True, null=True, validators=[validate_image_size])
 
     def save(self, *args, **kwargs):
         # Track status changes
@@ -74,12 +75,12 @@ class BirthCertificate(models.Model):
 
     def __str__(self):
 
-        return f"{self.child_name} - {self.applicant_name}"
+        return f"{self.first_name} {self.last_name} - {self.application_number}"
 
 
 # class Images(models.Model):
 #     application = models.ForeignKey(
-#         BirthCertificate, 
+#         BirthCertificate,
 #         on_delete=models.CASCADE,
 #         related_name="images",
 #         )

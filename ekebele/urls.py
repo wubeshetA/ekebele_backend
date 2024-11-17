@@ -20,10 +20,11 @@ from accounts.views import check_is_staff, VerifyEmailView
 # import settings
 from django.conf import settings
 from django.conf.urls.static import static
+from ekebele.admin import custom_admin_site
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', custom_admin_site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 

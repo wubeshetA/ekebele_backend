@@ -61,7 +61,7 @@ def notify_status_change(sender, instance, created, **kwargs):
                         subject="Birth Certificate Approved",
                         message=f"Dear {instance.first_name} {instance.last_name},\n\n"
                                 "Your birth certificate application has been approved. "
-                                "You view and download your certificate on eKebele portal.\n\n"
+                                "You can view and download your certificate on eKebele portal.\n\n"
                                 "Thank you,\nThe eKebele Team",
                         from_email="eKebele Team <ekebele.eth@gmail.com>",
                         recipient_list=[instance.applicant_email_address],
