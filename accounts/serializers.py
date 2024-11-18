@@ -15,21 +15,24 @@ class CustomUserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'first_name', 'last_name',
-                  'phone_number', 'email', 'password')
+                  'phone_number', 'email', 'password', 'nid')
 
         extra_kwargs = {
-            'verification_code': {'write_only': True},  # Ensure it's not requested
+            # Ensure it's not requested
+            'verification_code': {'write_only': True},
         }
+
 
 class CustomUserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = User
-        fields = ('id', 'first_name', 'last_name', 'phone_number', 'email', 'is_staff')
+        fields = ('id', 'first_name', 'last_name',
+                  'phone_number', 'email', 'is_staff', 'nid')
         extra_kwargs = {
-            'verification_code': {'write_only': True},  # Hide it from being readable
+            # Hide it from being readable
+            'verification_code': {'write_only': True},
         }
-    
-   
+
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -43,8 +46,18 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
-
-
 class VerifyEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
     verification_code = serializers.CharField(max_length=6)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user_type = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name',
+                  'user_type', 'nid', 'phone_number']
+
+    def get_user_type(self, obj):
+        return 'staff' if obj.is_staff else 'public'

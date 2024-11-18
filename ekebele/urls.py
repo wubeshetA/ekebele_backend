@@ -21,6 +21,7 @@ from accounts.views import check_is_staff, VerifyEmailView
 from django.conf import settings
 from django.conf.urls.static import static
 from ekebele.admin import custom_admin_site
+from accounts.views import UserProfileView
 
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('api/', include('vital_events.urls')),
     path('auth/check-is-staff/', check_is_staff, name='check-is-staff'),
     path('auth/verify-email/', VerifyEmailView.as_view(), name='verify-email'),
+     path('auth/user/profile/', UserProfileView.as_view(), name='user-profile'),
 ]
 
 if settings.DEBUG:  # Serve media files in development

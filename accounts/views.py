@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny
-from .serializers import VerifyEmailSerializer
+from .serializers import VerifyEmailSerializer, UserProfileSerializer
 
 User = get_user_model()
 
@@ -46,3 +46,13 @@ class VerifyEmailView(APIView):
 
         except User.DoesNotExist:
             return Response({"error": "User with this email does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
