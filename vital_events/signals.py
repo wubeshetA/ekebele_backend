@@ -45,8 +45,6 @@ def send_birth_certificate_email(sender, instance, created, **kwargs):
             )
         except Exception as e:
             print(f"Failed to send email: {e}")
-        else:
-            print("================ Email sent successfully")
 
 
 @receiver(post_save, sender=BirthCertificate)
