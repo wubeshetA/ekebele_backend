@@ -30,7 +30,7 @@ class User(AbstractUser):
     username = None  # We are not using the username field
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, unique=True)
-    nid = models.CharField(max_length=16, unique=True, blank=True, null=True)
+    nid = models.CharField(max_length=12, unique=True, blank=True, null=True)
     verification_code = models.CharField(max_length=6, blank=True, null=True)
 
     # Default to inactive until verified
